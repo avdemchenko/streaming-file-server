@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./uploads:/app/uploads
+    environment:
+      - FLASK_APP=app
+      - FLASK_ENV=production
+      - SECRET_KEY=${SECRET_KEY:-your-secret-key-here}
+      - UPLOAD_FOLDER=/app/uploads
+      - CORS_ORIGINS=*
+    restart: unless-stopped
+
+  # For development
+  dev:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - ./uploads:/app/uploads
+    environment:
+      - FLASK_APP=app
+      - FLASK_ENV=development
+      - SECRET_KEY=dev-secret-key
+      - UPLOAD_FOLDER=/app/uploads
+      - CORS_ORIGINS=*
+    command: poetry run flask run --host=0.0.0.0 --port=3000

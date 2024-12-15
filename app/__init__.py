@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from flask import Flask
 from flask_cors import CORS
 from flask_limiter import Limiter
@@ -11,23 +13,25 @@ limiter = Limiter(
     default_limits=["200 per day", "50 per hour"]
 )
 
+
 def create_app(config_name='default'):
     app = Flask(__name__)
-    
+
     # Load configuration
     app.config.from_object(config[config_name])
-    
+
     # Initialize extensions
     CORS(app)
     limiter.init_app(app)
-    
-    # Create upload directory if it doesn't exist
+
+    # Ensure UPLOAD_FOLDER is a Path object and create it if it doesn't exist
+    app.config['UPLOAD_FOLDER'] = Path(app.config['UPLOAD_FOLDER'])
     app.config['UPLOAD_FOLDER'].mkdir(parents=True, exist_ok=True)
-    
+
     # Register blueprints
     from app.api.routes import api_bp
     app.register_blueprint(api_bp)
-    
+
     # Configure Swagger UI
     SWAGGER_URL = '/api/docs'
     API_URL = '/static/swagger.json'
@@ -39,5 +43,5 @@ def create_app(config_name='default'):
         }
     )
     app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
-    
-    return app 
+
+    return app
