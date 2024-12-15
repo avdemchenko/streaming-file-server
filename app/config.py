@@ -11,7 +11,7 @@ class Config:
 
     # Security
     SECRET_KEY = os.getenv('SECRET_KEY', 'your-secret-key-here')
-    ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'doc', 'docx'}
+    ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'zip'}
 
     # Rate limiting
     RATELIMIT_DEFAULT = "200 per day;50 per hour"
